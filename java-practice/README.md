@@ -1,4 +1,4 @@
-# JavaPractive
+# Java Practice
 
 This project was created for demonstration purposes.
 
