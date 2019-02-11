@@ -48,6 +48,7 @@ public class BankAccountTest {
         }
 
         executorService.shutdown();
+        assertTrue(threadCount == futures.size());
         // we should expect 2 exceptions
         //  3 * 5 = 15; 15 - 9 = 6; 6 / 3 = 2
         assertTrue(exceptions.size() == 2);
