@@ -98,6 +98,45 @@ public class GameTest {
 
     }
 
+    @Test
+    public void guidedGamePlayTest2(){
+        Game g1 = new Game();
+
+        assertTrue(g1.getState() == GameState.NotReady);
+        Player[] players = new Player[] { new Player(1, "Roger Federer"),
+                new Player(2, "Pete Sampras")};
+        g1.setPlayers(players[0],  players[1]);
+
+        assertTrue(g1.getState() == GameState.Ready);
+
+        g1.start();
+        assertTrue(g1.getState() == GameState.Playing);
+
+        g1.score(players[0]); // Player 1: 15, Player 2: 0
+        assertTrue(g1.getState() == GameState.Playing);
+        g1.score(players[0]); // Player 1: 30, Player 2: 0
+        assertTrue(g1.getState() == GameState.Playing);
+        g1.score(players[0]); // Player 1: 40, Player 2: 0
+        assertTrue(g1.getState() == GameState.Playing);
+        g1.score(players[1]); // Player 1: 40, Player 2: 15
+        assertTrue(g1.getState() == GameState.Playing);
+        g1.score(players[1]); // Player 1: 40, Player 2: 30
+        assertTrue(g1.getState() == GameState.Playing);
+        g1.score(players[1]); // Player 1: 40, Player 2: 40
+        assertTrue(g1.getState() == GameState.Playing);
+        g1.score(players[1]); // Player 1: 40, Player 2: Advantage
+        assertTrue(g1.getState() == GameState.Playing);
+        g1.score(players[0]); // Player 1: 40, Player 2: 40
+        assertTrue(g1.getState() == GameState.Playing);
+        g1.score(players[0]); // Player 1: Advantage, Player 2: 40
+        assertTrue(g1.getState() == GameState.Playing);
+        g1.score(players[0]); // Player 1: Victory, Player 2: 40
+        assertTrue(g1.getState() == GameState.Finished);
+
+        assertTrue(g1.getWinner().equals(players[0]));
+
+    }
+
 
 
 }

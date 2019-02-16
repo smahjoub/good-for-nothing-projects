@@ -18,8 +18,16 @@ public class Score {
 
     /**
      * Increase the score
+     * @param opponentPlayerScore
+     * @throws IllegalArgumentException
      */
-    public void increase(){
+    public void increase(Score opponentPlayerScore)
+            throws IllegalArgumentException {
+
+        if(opponentPlayerScore.getCurrentScore() == TennisScore.Victory){
+            throw new IllegalArgumentException("Cannot increase the current score if opponent player already won!");
+        }
+
         TennisScore newScore = null;
         switch (currentScore){
             case Zero:
@@ -32,6 +40,16 @@ public class Score {
                 newScore = TennisScore.Forty;
                 break;
             case Forty:
+                if(opponentPlayerScore.getCurrentScore() == TennisScore.Forty){
+                    newScore = TennisScore.Advantage;
+                } else if(opponentPlayerScore.getCurrentScore() == TennisScore.Advantage){
+                    opponentPlayerScore.removeAdvantage();
+                    newScore = TennisScore.Forty;
+                } else {
+                    newScore = TennisScore.Victory;
+                }
+                break;
+            case Advantage:
                 newScore = TennisScore.Victory;
                 break;
             case Victory:
@@ -40,6 +58,17 @@ public class Score {
         }
 
         currentScore = newScore;
+    }
+
+    /**
+     * Change the score from 'Advantage' to 'Forty'
+     */
+    public void removeAdvantage()
+            throws UnsupportedOperationException {
+        if(currentScore != TennisScore.Advantage){
+            throw new UnsupportedOperationException("The current score is not advantage");
+        }
+        currentScore = TennisScore.Forty;
     }
 
     /**

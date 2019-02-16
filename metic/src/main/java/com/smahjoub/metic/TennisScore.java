@@ -5,6 +5,7 @@ public enum TennisScore {
     Fifteen("Fifteen"),
     Thirty("Thirty"),
     Forty("Forty"),
+    Advantage("Advantage"),
     Victory("Victory");
 
     private final String name;

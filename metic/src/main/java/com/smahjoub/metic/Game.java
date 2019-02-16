@@ -92,12 +92,27 @@ public final class Game {
             throw new UnsupportedOperationException("Cannot not change score on this game state:" + state.getState());
         }
 
-        Score currentScore = scoreboard.get(player);
-        currentScore.increase();
+        Player opponent = getOpponent(player);
 
-        if(currentScore.isWinningScore()){
+        Score currentPlayerScore = scoreboard.get(player);
+        currentPlayerScore.increase(scoreboard.get(opponent));
+
+        if(currentPlayerScore.isWinningScore()){
             state = GameState.Finished;
         }
+    }
+
+    private Player getOpponent(Player player) {
+        Player returnValue = null;
+
+        for (Player p : scoreboard.keySet()) {
+            if (!player.equals(p)) {
+                returnValue = p;
+                break;
+            }
+        }
+
+        return  returnValue;
     }
 
     /**
