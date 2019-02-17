@@ -9,9 +9,13 @@ import java.util.Map;
  */
 public final class Match {
 
+    private final static int MIN_SCORE_TO_WIN = 6;
+    private final static int MIN_TIE_BREAK_SCORE_TO_WIN = MIN_SCORE_TO_WIN + 7;
+
     private HashMap<Player, GamesManager> scoreboard;
     private State state;
     private Player winner;
+    private boolean tieBreakRule;
 
     /**
      * Construct the match Object with empty score board and 'not ready' state.
@@ -28,6 +32,7 @@ public final class Match {
         scoreboard.clear();
         winner = null;
         state = State.NotReady;
+        tieBreakRule = false;
     }
 
     /**
@@ -76,7 +81,7 @@ public final class Match {
         if(state != State.Ready){
             throw new UnsupportedOperationException("Cannot start the match on this state: " + state.getName());
         }
-
+        tieBreakRule = false;
         state = State.Playing;
 
         for (GamesManager psm : scoreboard.values()) {
@@ -105,6 +110,10 @@ public final class Match {
         GamesManager gamesManagerManager = scoreboard.get(player);
         gamesManagerManager.score(opponentGamesManager);
 
+        if(checkTieBreak(gamesManagerManager, opponentGamesManager)){
+            tieBreakRule = true;
+        }
+
         if(hasWon(gamesManagerManager, opponentGamesManager)){
             gamesManagerManager.end();
             opponentGamesManager.end();
@@ -113,11 +122,20 @@ public final class Match {
         }
     }
 
+    private boolean checkTieBreak(GamesManager playerSetManager, GamesManager opponentPlayerSetManager) {
+        return playerSetManager.getSetScore() == MIN_SCORE_TO_WIN && opponentPlayerSetManager.getSetScore() == MIN_SCORE_TO_WIN;
+    }
+
     private boolean hasWon(GamesManager playerSetManager, GamesManager opponentPlayerSetManager){
         boolean hasWon = false;
 
-        hasWon |= playerSetManager.getSetScore() == 6 && opponentPlayerSetManager.getSetScore() <= 4;
-        hasWon |= playerSetManager.getSetScore() == 7 && opponentPlayerSetManager.getSetScore() == 5;
+        if(!tieBreakRule){
+            hasWon |= playerSetManager.getSetScore() == MIN_SCORE_TO_WIN && opponentPlayerSetManager.getSetScore() <= 4;
+            hasWon |= playerSetManager.getSetScore() == 7 && opponentPlayerSetManager.getSetScore() == 5;
+        } else {
+            hasWon = playerSetManager.getSetScore() >= MIN_TIE_BREAK_SCORE_TO_WIN &&
+                    playerSetManager.getSetScore() - opponentPlayerSetManager.getSetScore() == 2;
+        }
 
         return hasWon;
     }
@@ -133,6 +151,14 @@ public final class Match {
         }
 
         return  returnValue;
+    }
+
+    /**
+     * Get if tie break rule is active
+     * @return
+     */
+    public boolean isTieBreakRule() {
+        return tieBreakRule;
     }
 
     /**

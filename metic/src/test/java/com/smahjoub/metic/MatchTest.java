@@ -85,29 +85,74 @@ public class MatchTest {
         assertTrue(g1.getState() == State.Playing);
 
         for (int i = 1; i <= 5; i++){
-            g1.score(players[0]); // 15-0
-            g1.score(players[0]); // 30-0
-            g1.score(players[0]); // 40-0
-            g1.score(players[0]); // Win 1 point
+            winGame(g1, players[0]);
         }
 
         for (int i = 1; i <= 5; i++){
-            g1.score(players[1]); // 15-0
-            g1.score(players[1]); // 30-0
-            g1.score(players[1]); // 40-0
-            g1.score(players[1]); // Win 1 point
+            winGame(g1, players[1]);
         }
 
+        assertTrue(!g1.isTieBreakRule());
+
         for (int i = 1; i <= 2; i++){
-            g1.score(players[0]); // 15-0
-            g1.score(players[0]); // 30-0
-            g1.score(players[0]); // 40-0
-            g1.score(players[0]); // Win 1 point
+            winGame(g1, players[0]);
         }
 
         assertTrue(g1.getState() == State.Finished);
 
         assertTrue(g1.getWinner().equals(players[0]));
+    }
+
+    @Test
+    public void tieBreakRuleTest(){
+        Match g1 = new Match();
+
+        assertTrue(g1.getState() == State.NotReady);
+        Player[] players = new Player[] { new Player(1, "Roger Federer"),
+                new Player(2, "Pete Sampras")};
+        g1.setPlayers(players[0],  players[1]);
+
+        assertTrue(g1.getState() == State.Ready);
+
+        g1.start();
+
+        assertTrue(g1.getState() == State.Playing);
+
+        for (int i = 1; i <= 5; i++){
+            winGame(g1, players[0]);
+        }
+
+        for (int i = 1; i <= 5; i++){
+            winGame(g1, players[1]);
+        }
+
+        winGame(g1, players[0]);
+        winGame(g1, players[1]);
+
+        assertTrue(g1.isTieBreakRule());
+
+        for (int i = 1; i <= 4; i++){
+            winGame(g1, players[0]);
+        }
+
+        for (int i = 1; i <= 5; i++){
+            winGame(g1, players[1]);
+        }
+        // Score now is 11-10
+        for (int i = 1; i <= 3; i++){
+            winGame(g1, players[0]);
+        }
+        // Score now 13-11 Player 0 win
+        assertTrue(g1.getState() == State.Finished);
+
+        assertTrue(g1.getWinner().equals(players[0]));
+    }
+
+    private void winGame(Match g1, Player player) {
+        g1.score(player); // 15-0
+        g1.score(player); // 30-0
+        g1.score(player); // 40-0
+        g1.score(player); // Win 1 point
     }
 
 }
