@@ -4,12 +4,12 @@ import org.junit.Test;
 
 import static junit.framework.TestCase.assertTrue;
 
-public class SetScoreTest {
+public class GameScoreTest {
 
     @Test
     public void testIncreaseSetScore(){
-        SetScore s1 = new SetScore();
-        SetScore s2 = new SetScore();
+        GameScore s1 = new GameScore();
+        GameScore s2 = new GameScore();
 
         assertTrue(s1.getCurrentScore() == TennisScore.Zero);
         assertTrue(!s1.isWinningScore());
@@ -53,4 +53,7 @@ public class SetScoreTest {
         assertTrue(s1.getCurrentScore() == TennisScore.Victory);
         assertTrue(s1.isWinningScore());
     }
+
+
+
 }

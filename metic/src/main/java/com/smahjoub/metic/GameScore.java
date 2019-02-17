@@ -4,7 +4,7 @@ package com.smahjoub.metic;
  * The score manager class
  * @author smahjoub
  */
-public class SetScore {
+public class GameScore {
 
     private static final TennisScore WINNING_SCORE = TennisScore.Victory;
     private TennisScore currentScore;
@@ -12,7 +12,7 @@ public class SetScore {
     /**
      * Get a socre object with score set to 'Zero'
      */
-    public SetScore(){
+    public GameScore(){
         currentScore = TennisScore.Zero;
     }
 
@@ -21,7 +21,7 @@ public class SetScore {
      * @param opponentPlayerScore
      * @throws IllegalArgumentException
      */
-    public void increase(SetScore opponentPlayerScore)
+    public void increase(GameScore opponentPlayerScore)
             throws IllegalArgumentException {
 
         if(opponentPlayerScore.getCurrentScore() == TennisScore.Victory){
