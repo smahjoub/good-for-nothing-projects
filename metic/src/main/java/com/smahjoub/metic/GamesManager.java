@@ -3,7 +3,7 @@ package com.smahjoub.metic;
 import java.util.LinkedList;
 
 /**
- *
+ * A basic abstraction for GameScore class to enable score counting for sets
  * @author smahjoub
  */
 public class GamesManager {
@@ -14,7 +14,7 @@ public class GamesManager {
     private State state;
 
     /**
-     *
+     * Create a new instance of GamesManager
      */
     public GamesManager(){
         scores = new LinkedList<>();
@@ -29,18 +29,18 @@ public class GamesManager {
     }
 
     /**
-     *
+     * Start managing games
      */
     public void start(){
         state = State.Playing;
     }
 
     /**
-     *
+     * Get the current game instance
      * @return
-     * @throws UnsupportedOperationException
+     * @throws UnsupportedOperationException if the manager state is 'Not Ready'
      */
-    public GameScore getCurrentSetScore()
+    public GameScore getCurrentGame()
             throws UnsupportedOperationException {
         if(state == State.NotReady){
             throw new UnsupportedOperationException("Cannot get set score if the game is not ready");
@@ -50,15 +50,15 @@ public class GamesManager {
     }
 
     /**
-     *
-     * @param opponentPlayerSetManager
-     * @throws IllegalArgumentException
-     * @throws UnsupportedOperationException
+     * Add one point
+     * @param opponentGamesManager the opponent game manager
+     * @throws IllegalArgumentException if the argument is null
+     * @throws UnsupportedOperationException if the the method is called on the wrong state
      */
-    public void score(GamesManager opponentPlayerSetManager)
+    public void score(GamesManager opponentGamesManager)
             throws IllegalArgumentException, UnsupportedOperationException {
 
-        if(opponentPlayerSetManager == null){
+        if(opponentGamesManager == null){
             throw new IllegalArgumentException("Opponent player GamesManager should not be null");
         }
 
@@ -66,13 +66,13 @@ public class GamesManager {
             throw new UnsupportedOperationException("Cannot score on this state: " + state.getName());
         }
 
-        GameScore currentPlayerScore = getCurrentSetScore();
-        currentPlayerScore.increase(opponentPlayerSetManager.getCurrentSetScore());
+        GameScore currentPlayerScore = getCurrentGame();
+        currentPlayerScore.increase(opponentGamesManager.getCurrentGame());
 
         if(currentPlayerScore.isWinningScore()){
             setScore++;
             moveNextSet();
-            opponentPlayerSetManager.moveNextSet();
+            opponentGamesManager.moveNextSet();
         }
     }
 
@@ -84,7 +84,8 @@ public class GamesManager {
         return state;
     }
 
-    public void end() throws UnsupportedOperationException{
+    public void end()
+            throws UnsupportedOperationException{
         if(state != State.Playing){
             throw new UnsupportedOperationException("Cannot end game at this state: " + state.getName());
         }

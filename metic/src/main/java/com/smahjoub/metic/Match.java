@@ -101,13 +101,13 @@ public final class Match {
             throw new UnsupportedOperationException("Cannot not change score on this match state:" + state.getName());
         }
 
-        GamesManager opponentScoreManager = getOpponentSetManager(player);
-        GamesManager setManager = scoreboard.get(player);
-        setManager.score(opponentScoreManager);
+        GamesManager opponentGamesManager = getOpponentSetManager(player);
+        GamesManager gamesManagerManager = scoreboard.get(player);
+        gamesManagerManager.score(opponentGamesManager);
 
-        if(hasWon(setManager, opponentScoreManager)){
-            setManager.end();
-            opponentScoreManager.end();
+        if(hasWon(gamesManagerManager, opponentGamesManager)){
+            gamesManagerManager.end();
+            opponentGamesManager.end();
             winner = player;
             state = State.Finished;
         }
