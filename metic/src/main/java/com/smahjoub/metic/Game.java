@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public final class Game {
 
-    private HashMap<Player, Score> scoreboard;
+    private HashMap<Player, SetScore> scoreboard;
     private GameState state;
 
     /**
@@ -55,8 +55,8 @@ public final class Game {
         }
 
         scoreboard.clear();
-        scoreboard.put(player1, new Score());
-        scoreboard.put(player2, new Score());
+        scoreboard.put(player1, new SetScore());
+        scoreboard.put(player2, new SetScore());
 
         state = GameState.Ready;
     }
@@ -94,7 +94,7 @@ public final class Game {
 
         Player opponent = getOpponent(player);
 
-        Score currentPlayerScore = scoreboard.get(player);
+        SetScore currentPlayerScore = scoreboard.get(player);
         currentPlayerScore.increase(scoreboard.get(opponent));
 
         if(currentPlayerScore.isWinningScore()){
@@ -127,7 +127,7 @@ public final class Game {
         }
 
         Player winner = null;
-        for (Map.Entry<Player, Score> playerScore : scoreboard.entrySet()) {
+        for (Map.Entry<Player, SetScore> playerScore : scoreboard.entrySet()) {
             if (playerScore.getValue().isWinningScore()) {
                 winner = playerScore.getKey();
             }
