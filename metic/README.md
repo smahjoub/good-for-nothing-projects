@@ -40,6 +40,3 @@ To win a game, a player must win :
 If both players have 6 games, then the next game is a tie-break.
 
 The winner of the tie-breaker game wins the set.
-
-## Win the match
-To win the match, a player must win 3 sets.
