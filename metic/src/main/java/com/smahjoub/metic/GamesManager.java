@@ -24,7 +24,7 @@ public class GamesManager {
     public void initialize(){
         scores.clear();
         score = 0;
-        moveNextSet();
+        moveNextGame();
         state = State.Ready;
     }
 
@@ -71,8 +71,8 @@ public class GamesManager {
 
         if(currentPlayerScore.isWinningScore()){
             score++;
-            moveNextSet();
-            opponentGamesManager.moveNextSet();
+            moveNextGame();
+            opponentGamesManager.moveNextGame();
         }
     }
 
@@ -92,7 +92,7 @@ public class GamesManager {
         state = State.Finished;
     }
 
-    public void moveNextSet() {
+    public void moveNextGame() {
         scores.add(new GameScore());
     }
 }
