@@ -12,7 +12,12 @@ public final class Match {
     private final static int MIN_SCORE_TO_WIN = 6;
     private final static int MIN_TIE_BREAK_SCORE_TO_WIN = MIN_SCORE_TO_WIN + 7;
 
+    private final static int MIN_DIFFERENCE_TO_WIN = 2;
+
+    private final static int TIE_BREAK_SCORE = 6;
+
     private HashMap<Player, GamesManager> scoreboard;
+    private HashMap<Player, Player> playerOpponent;
     private State state;
     private Player winner;
     private boolean tieBreakRule;
@@ -22,6 +27,7 @@ public final class Match {
      */
     public Match(){
         scoreboard = new HashMap<>();
+        playerOpponent = new HashMap<>();
         state = State.NotReady;
     }
 
@@ -30,6 +36,7 @@ public final class Match {
      */
     public void reset(){
         scoreboard.clear();
+        playerOpponent.clear();
         winner = null;
         state = State.NotReady;
         tieBreakRule = false;
@@ -64,6 +71,9 @@ public final class Match {
         scoreboard.clear();
         scoreboard.put(player1, new GamesManager());
         scoreboard.put(player2, new GamesManager());
+
+        playerOpponent.put(player1, player2);
+        playerOpponent.put(player2, player1);
 
         state = State.Ready;
 
@@ -106,7 +116,7 @@ public final class Match {
             throw new UnsupportedOperationException("Cannot not change score on this match state:" + state.getName());
         }
 
-        GamesManager opponentGamesManager = getOpponentSetManager(player);
+        GamesManager opponentGamesManager = getOpponentGamesManager(player);
         GamesManager gamesManagerManager = scoreboard.get(player);
         gamesManagerManager.score(opponentGamesManager);
 
@@ -122,35 +132,22 @@ public final class Match {
         }
     }
 
-    private boolean checkTieBreak(GamesManager playerSetManager, GamesManager opponentPlayerSetManager) {
-        return playerSetManager.getSetScore() == MIN_SCORE_TO_WIN && opponentPlayerSetManager.getSetScore() == MIN_SCORE_TO_WIN;
+    private boolean checkTieBreak(GamesManager playerSetManager, GamesManager opponentPlayerGamesManager) {
+        return playerSetManager.getScore() == TIE_BREAK_SCORE &&
+                opponentPlayerGamesManager.getScore() == TIE_BREAK_SCORE;
     }
 
-    private boolean hasWon(GamesManager playerSetManager, GamesManager opponentPlayerSetManager){
-        boolean hasWon = false;
+    private boolean hasWon(GamesManager playerGamesManager, GamesManager opponentPlayerGamesManager){
+        // get the score difference
+        final int scoreDiff = playerGamesManager.getScore() - opponentPlayerGamesManager.getScore();
+        // get min score to win depends on tie break rule
+        final int minScoreToWin = (tieBreakRule) ? MIN_TIE_BREAK_SCORE_TO_WIN : MIN_SCORE_TO_WIN;
 
-        if(!tieBreakRule){
-            hasWon |= playerSetManager.getSetScore() == MIN_SCORE_TO_WIN && opponentPlayerSetManager.getSetScore() <= 4;
-            hasWon |= playerSetManager.getSetScore() == 7 && opponentPlayerSetManager.getSetScore() == 5;
-        } else {
-            hasWon = playerSetManager.getSetScore() >= MIN_TIE_BREAK_SCORE_TO_WIN &&
-                    playerSetManager.getSetScore() - opponentPlayerSetManager.getSetScore() == 2;
-        }
-
-        return hasWon;
+        return playerGamesManager.getScore()  >= minScoreToWin && scoreDiff >= MIN_DIFFERENCE_TO_WIN;
     }
 
-    private GamesManager getOpponentSetManager(Player player) {
-        GamesManager returnValue = null;
-
-        for (Map.Entry<Player, GamesManager> playerScore : scoreboard.entrySet()) {
-            if (!player.equals(playerScore.getKey())) {
-                returnValue = playerScore.getValue();
-                break;
-            }
-        }
-
-        return  returnValue;
+    private GamesManager getOpponentGamesManager(Player player) {
+        return scoreboard.get(playerOpponent.get(player));
     }
 
     /**

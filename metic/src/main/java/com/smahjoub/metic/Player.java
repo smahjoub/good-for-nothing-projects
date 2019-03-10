@@ -22,6 +22,11 @@ public class Player {
     }
 
     @Override
+    public int hashCode() {
+        return id;
+    }
+
+    @Override
     public boolean equals(Object obj) {
         //Check for null and compare run-time types.
         if (obj == null || !(obj instanceof Player))

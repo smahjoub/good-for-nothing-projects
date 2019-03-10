@@ -3,14 +3,14 @@ package com.smahjoub.metic;
 import java.util.LinkedList;
 
 /**
- * A basic abstraction for GameScore class to enable score counting for sets
+ * A basic abstraction for GameScore class to enable score counting for matches
  * @author smahjoub
  */
 public class GamesManager {
 
     private final LinkedList<GameScore> scores;
 
-    private int setScore;
+    private int score;
     private State state;
 
     /**
@@ -23,7 +23,7 @@ public class GamesManager {
 
     public void initialize(){
         scores.clear();
-        setScore = 0;
+        score = 0;
         moveNextSet();
         state = State.Ready;
     }
@@ -70,14 +70,14 @@ public class GamesManager {
         currentPlayerScore.increase(opponentGamesManager.getCurrentGame());
 
         if(currentPlayerScore.isWinningScore()){
-            setScore++;
+            score++;
             moveNextSet();
             opponentGamesManager.moveNextSet();
         }
     }
 
-    public int getSetScore() {
-        return setScore;
+    public int getScore() {
+        return score;
     }
 
     public State getState() {
