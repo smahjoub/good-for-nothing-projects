@@ -2,13 +2,29 @@
 using System.Collections.Generic;
 using System.Text;
 using RateSchedule.Extentions;
+using RateSchedule.Ranges;
 
 namespace RateSchedule
 {
-    public abstract class Tax
+    public sealed class Tax
     {
         #region fields
-        protected List<TaxRange> ranges;
+        private readonly List<TaxRange> ranges;
+        private readonly TaxSituation taxSituation;
+        #endregion
+
+        #region ctor
+        public Tax(IRangeInfo rangeInfo, TaxSituation taxSitu)
+        {
+            ranges = new List<TaxRange>();
+            var rangesInfo = rangeInfo.Ranges;
+            for (int i = 0; i < rangeInfo.RangesCount; i++)
+            {
+                ranges.Add(new TaxRange(rangesInfo[i, 0], rangesInfo[i, 1], rangesInfo[i, 2], rangesInfo[i, 3]));
+            }
+
+            taxSituation = taxSitu;
+        }
         #endregion
 
         #region public methods
@@ -32,6 +48,19 @@ namespace RateSchedule
         }
         #endregion
 
+
+        #region propeties
+        public IList<TaxRange> Ranges
+        {
+            get { return ranges.AsReadOnly(); }
+        }
+
+        public TaxSituation TaxSituation
+        {
+            get { return taxSituation; }
+        }
+        #endregion
+
         #region static methods
         public static Tax GenerateInstanceFromSituation(TaxSituation taxSituation)
         {
@@ -40,16 +69,16 @@ namespace RateSchedule
             switch (taxSituation)
             {
                 case TaxSituation.Single:
-                    instance = new SingleTax();
+                    instance = new Tax(new SingleTax(), taxSituation);
                     break;
                 case TaxSituation.MarriedfilingJointlyorQualifyingWidow:
-                    instance = new MFJOrQWTax();
+                    instance = new Tax(new MFJOrQWTax(), taxSituation);
                     break;
                 case TaxSituation.MarriedFilingSeparately:
-                    instance = new MFSTax();
+                    instance = new Tax(new MFSTax(), taxSituation);
                     break;
                 case TaxSituation.HeadofHousehold:
-                    instance = new HHTax();
+                    instance = new Tax(new HHTax(), taxSituation);
                     break;
             }
 

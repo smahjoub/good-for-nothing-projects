@@ -1,3 +1,4 @@
+using RateSchedule.Ranges;
 using System;
 using Xunit;
 
@@ -17,7 +18,7 @@ namespace RateSchedule.Tests
         [InlineData(2989900, 1141046.15d)]
         public void SingleTaxesTest(decimal amount, decimal expectedTaxes)
         {
-            Tax tax = new SingleTax();
+            Tax tax = new Tax(new SingleTax(), TaxSituation.Single);
 
             decimal t = tax.Calculate(amount);
 
@@ -35,7 +36,7 @@ namespace RateSchedule.Tests
         [InlineData(500000, 150272.80d)]
         public void HHTaxesTest(decimal amount, decimal expectedTaxes)
         {
-            Tax tax = new HHTax();
+            Tax tax = new Tax(new HHTax(), TaxSituation.HeadofHousehold);
 
             decimal t = tax.Calculate(amount);
 
@@ -53,7 +54,7 @@ namespace RateSchedule.Tests
         [InlineData(500000, 144752.9d)]
         public void MFJOrQWTaxTest(decimal amount, decimal expectedTaxes)
         {
-            Tax tax = new MFJOrQWTax();
+            Tax tax = new Tax(new MFJOrQWTax(), TaxSituation.MarriedfilingJointlyorQualifyingWidow);
 
             decimal t = tax.Calculate(amount);
 
@@ -71,7 +72,7 @@ namespace RateSchedule.Tests
         [InlineData(500000, 171376.45d)]
         public void MFSTaxTest(decimal amount, decimal expectedTaxes)
         {
-            Tax tax = new MFSTax();
+            Tax tax = new Tax(new MFSTax(), TaxSituation.MarriedFilingSeparately);
 
             decimal t = tax.Calculate(amount);
 
