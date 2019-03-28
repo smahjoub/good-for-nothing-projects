@@ -32,37 +32,20 @@ namespace RateSchedule
         private const decimal RANGE_6_TAX_PERENTAGE = 35.0M;
         private const decimal RANGE_6_MAX_TAX = 63981.25M;
 
+        private const decimal RANGE_7_MAX = decimal.MaxValue;
         private const decimal RANGE_7_TAX_PERENTAGE = 39.6M;
 
 
         public MFSTax()
         {
-            range1Min = RANGE_1_MIN;
-            range1Max = RANGE_1_MAX;
-            range1TaxPercentage = RANGE_1_TAX_PERENTAGE;
-            range1MaxTax = RANGE_1_MAX_TAX;
-
-            range2Max = RANGE_2_MAX;
-            range2TaxPercentage = RANGE_2_TAX_PERENTAGE;
-            range2MaxTax = RANGE_2_MAX_TAX;
-
-            range3Max = RANGE_3_MAX;
-            range3TaxPercentage = RANGE_3_TAX_PERENTAGE;
-            range3MaxTax = RANGE_3_MAX_TAX;
-
-            range4Max = RANGE_4_MAX;
-            range4TaxPercentage = RANGE_4_TAX_PERENTAGE;
-            range4MaxTax = RANGE_4_MAX_TAX;
-
-            range5Max = RANGE_5_MAX;
-            range5TaxPercentage = RANGE_5_TAX_PERENTAGE;
-            range5MaxTax = RANGE_5_MAX_TAX;
-
-            range6Max = RANGE_6_MAX;
-            range6MaxPercentage = RANGE_6_TAX_PERENTAGE;
-            range6MaxTax = RANGE_6_MAX_TAX;
-
-            range7TaxPercentage = RANGE_7_TAX_PERENTAGE;
+            ranges = new List<TaxRange>();
+            ranges.Add(new TaxRange(RANGE_1_MIN, RANGE_1_MAX, RANGE_1_TAX_PERENTAGE, decimal.Zero));
+            ranges.Add(new TaxRange(RANGE_1_MAX, RANGE_2_MAX, RANGE_2_TAX_PERENTAGE, RANGE_1_MAX_TAX));
+            ranges.Add(new TaxRange(RANGE_2_MAX, RANGE_3_MAX, RANGE_3_TAX_PERENTAGE, RANGE_2_MAX_TAX));
+            ranges.Add(new TaxRange(RANGE_3_MAX, RANGE_4_MAX, RANGE_4_TAX_PERENTAGE, RANGE_3_MAX_TAX));
+            ranges.Add(new TaxRange(RANGE_4_MAX, RANGE_5_MAX, RANGE_5_TAX_PERENTAGE, RANGE_4_MAX_TAX));
+            ranges.Add(new TaxRange(RANGE_5_MAX, RANGE_6_MAX, RANGE_6_TAX_PERENTAGE, RANGE_5_MAX_TAX));
+            ranges.Add(new TaxRange(RANGE_6_MAX, RANGE_7_MAX, RANGE_7_TAX_PERENTAGE, RANGE_6_MAX_TAX));
         }
     }
 }
