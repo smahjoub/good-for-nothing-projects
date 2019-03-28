@@ -37,7 +37,7 @@ namespace RateSchedule
 
         public decimal Calculate(decimal income)
         {
-            if(decimal.Compare(income, range1Min) == 0)
+            if(decimal.Compare(income, range1Min) <= 0)
             {
                 return decimal.Zero;
             }
@@ -69,6 +69,30 @@ namespace RateSchedule
             {
                 return decimal.Add(range6MaxTax, decimal.Subtract(income, range6Max).GetPercentage(range7TaxPercentage));
             }
+        }
+
+        public static Tax GenerateInstanceFromSituation(TaxSituation taxSituation)
+        {
+            Tax instance = null;
+
+            switch (taxSituation)
+            {
+                case TaxSituation.Single:
+                    instance = new SingleTax();
+                    break;
+                case TaxSituation.MarriedfilingJointlyorQualifyingWidow:
+                    instance = new MFJOrQWTax();
+                    break;
+                case TaxSituation.MarriedFilingSeparately:
+                    instance = new MFSTax();
+                    break;
+                case TaxSituation.HeadofHousehold:
+                    instance = new HHTax();
+                    break;
+            }
+
+            return instance;
+
         }
     }
 }
